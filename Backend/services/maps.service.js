@@ -78,7 +78,7 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
             params: {
                 api_key: apiKey,
                 text: input,
-                size:5
+                size:3
             },
         });
 

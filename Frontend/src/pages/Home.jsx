@@ -8,10 +8,15 @@ import ConfirmRide from '../components/ConfirmRide';
 import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import MapComponent from '../components/Map';
+import axios from 'axios';
 
 const Home = () => {
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
+  const [suggestions,setSuggestions] = useState([])
+
+  const [pickupOn,setPickupOn] = useState(false)
+  const [destinationOn,setDestinationOn] = useState(false)
 
   const [panelOpen, setPanelOpen] = useState(false)
   const [vehiclePanel, setVehiclePanel] = useState(false)
@@ -25,6 +30,28 @@ const Home = () => {
   const confirmRidePanelRef = useRef(null)
   const vehicleFoundRef = useRef(null)
   const waitingForDriverRef = useRef(null)
+
+  const fetchSuggestions = async (query) =>{
+    if (!query || query.length<4) {
+      setSuggestions([])
+      return
+    }
+    try {
+      const token=localStorage.getItem('token')
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
+        params: { input: query },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });  
+      
+      setSuggestions(response.data || [])
+      console.log(response.data)
+    }
+    catch (err){
+      console.error('Error fetching suggestions:', err);
+    }
+  }
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -87,13 +114,13 @@ const Home = () => {
           <h4 className='text-2xl font-bold'>Find a trip</h4>
           <form onSubmit={(e) => submitHandler(e)}>
             <div className="line absolute h-12 w-1 top-[50%] left-10 bg-gray-900 rounded-full"></div>
-            <input value={pickup} onClick={() => { setPanelOpen(true) }} onChange={(e) => { setPickup(e.target.value) }} className='bg-[#eee] px-12 py-1 text-base rounded-lg w-full mt-5' type="text" placeholder='Add a pick-up location' />
-            <input value={destination} onClick={() => { setPanelOpen(true) }} onChange={(e) => { setDestination(e.target.value) }} className='bg-[#eee] px-12 py-1 text-base rounded-lg w-full mt-3' type="text" placeholder='Enter your destination' />
+            <input value={pickup} onClick={() => { setPanelOpen(true); setPickupOn(true); setDestinationOn(false) }} onChange={(e) => { setPickup(e.target.value);fetchSuggestions(e.target.value) }} className='bg-[#eee] px-12 py-1 text-base rounded-lg w-full mt-5' type="text" placeholder='Add a pick-up location' />
+            <input value={destination} onClick={() => { setPanelOpen(true);setDestinationOn(true); setPickupOn(false) }} onChange={(e) => { setDestination(e.target.value),fetchSuggestions(e.target.value) }} className='bg-[#eee] px-12 py-1 text-base rounded-lg w-full mt-3' type="text" placeholder='Enter your destination' />
           </form>
         </div>
 
         <div ref={panelRef} className='h-[0%] bg-white '>
-          <LocationSearchPanel setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel} />
+          <LocationSearchPanel pickup={pickup} destination={destination} pickupOn={pickupOn} destinationOn={destinationOn} setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel} suggestions={suggestions} setPickup={setPickup} setDestination={setDestination} setPickupOn={setPickupOn} setDestinationOn={setDestinationOn} />
         </div>
       </div>
 
