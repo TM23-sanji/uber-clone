@@ -14,6 +14,8 @@ const Home = () => {
   const [pickup, setPickup] = useState('')
   const [destination, setDestination] = useState('')
   const [suggestions,setSuggestions] = useState([])
+  const [fare, setFare] = useState({})
+  const [vehicleType,setVehicleType] = useState('')
 
   const [pickupOn,setPickupOn] = useState(false)
   const [destinationOn,setDestinationOn] = useState(false)
@@ -56,6 +58,7 @@ const Home = () => {
   const submitHandler = (e) => {
     e.preventDefault()
   }
+
   useGSAP(() => {
     if (panelOpen) {
       gsap.to(panelRef.current, { height: '73%', padding: '24px' })
@@ -120,20 +123,20 @@ const Home = () => {
         </div>
 
         <div ref={panelRef} className='h-[0%] bg-white '>
-          <LocationSearchPanel pickup={pickup} destination={destination} pickupOn={pickupOn} destinationOn={destinationOn} setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel} suggestions={suggestions} setPickup={setPickup} setDestination={setDestination} setPickupOn={setPickupOn} setDestinationOn={setDestinationOn} />
+          <LocationSearchPanel fare={fare} setFare={setFare} pickup={pickup} destination={destination} pickupOn={pickupOn} destinationOn={destinationOn} setPanelOpen={setPanelOpen} setVehiclePanel={setVehiclePanel} suggestions={suggestions} setPickup={setPickup} setDestination={setDestination} setPickupOn={setPickupOn} setDestinationOn={setDestinationOn} />
         </div>
       </div>
 
       <div ref={vehiclePanelRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-10 pt-12 translate-y-full'>
-        <VehicalPanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+        <VehicalPanel setVehicleType={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
       </div>
 
       <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 translate-y-full'>
-        <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />        
+        <ConfirmRide vehicleType={vehicleType} fare={fare} pickup={pickup} destination={destination} setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />        
       </div>
 
       <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 translate-y-full'>
-        <LookingForDriver setVehicleFound={setVehicleFound}/>
+        <LookingForDriver vehicleType={vehicleType} fare={fare} pickup={pickup} destination={destination} setVehicleFound={setVehicleFound}/>
       </div>
 
       <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 '>

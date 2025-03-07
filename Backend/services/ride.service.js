@@ -1,16 +1,17 @@
 const rideModel = require('../models/ride.model');
 const mapService = require('./maps.service');
 const crypto = require('crypto');
-const getFare = async (pickup,destination) =>{
+
+module.exports.getFare = async (pickup,destination) =>{
     if (!pickup || !destination) {
         throw new Error('Invalid Pickup or Destination Address');
     }
     const distanceTime= await mapService.getDistanceTime(pickup,destination);
 
     const baseFare = {
-        auto: 30,
-        car: 50,
-        motorcycle: 20
+        auto: 3,
+        car: 5,
+        motorcycle: 2
     };
 
     const perKmRate = {
@@ -33,6 +34,7 @@ const getFare = async (pickup,destination) =>{
 
     return fare;
 };
+
 const getOTP = (num)=>{
     const generateOTP = (num) => {
     const otp = crypto.randomInt(Math.pow(10, num - 1), Math.pow(10, num)).toString();    
@@ -40,6 +42,7 @@ const getOTP = (num)=>{
     }
     return generateOTP(num);
 }
+
 module.exports.createRide = async ({user, pickup, destination, vehicleType})=>{
     if (!user || !pickup || !destination || !vehicleType) {
         throw new Error('All fields are required');

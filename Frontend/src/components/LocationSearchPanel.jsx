@@ -1,6 +1,21 @@
-import React from 'react'
-
+import React from 'react' ;
+import axios from 'axios'; 
 const LocationSearchPanel = (props) => {
+
+  const fetchFare = async () =>{
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
+        params: { pickup: props.pickup, destination: props.destination },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+      });
+      props.setFare(response.data || {})
+    }
+    catch (err){
+      console.error('Error fetching fare:', err);
+    }
+  }
   
   return (
     <>
@@ -30,7 +45,7 @@ const LocationSearchPanel = (props) => {
       <button onClick={()=>{props.setPickup('');props.setDestination('');props.setPanelOpen(false)}} className="bg-red-200 px-4 py-2 rounded hover:bg-red-600"><i className="text-xl ri-pause-circle-fill"></i></button>
       <button onClick={()=>{
       if (props.pickup && props.destination){
-        props.setVehiclePanel(true);props.setPanelOpen(false)
+        props.setVehiclePanel(true);props.setPanelOpen(false);fetchFare()
         }}} className="bg-green-200 px-4 py-2 rounded hover:bg-green-600"><i className="text-xl ri-speed-fill"></i></button>
     </div>
     </>

@@ -17,7 +17,7 @@ const LookingForDriver = (props) => {
                         <i className="text-xl ri-home-3-fill"></i>
                         <div>
                             <h3 className='text-lg font-bold'>562/11-A</h3>
-                            <p className='text-gray-700 text-sm'>Kankariya Talab, Bhopal</p>
+                            <p className='text-gray-700 text-sm'>{props.pickup}</p>
                         </div>
                     </div>
 
@@ -25,14 +25,19 @@ const LookingForDriver = (props) => {
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
                             <h3 className='text-lg font-bold'>562/11-A</h3>
-                            <p className='text-gray-700 text-sm'>Kankariya Talab, Bhopal</p>
+                            <p className='text-gray-700 text-sm'>{props.destination}</p>
                         </div>
                     </div>
 
                     <div className='flex items-center gap-3 p-3 '>
                         <i className="text-xl ri-money-rupee-circle-line"></i>
                         <div>
-                            <h3 className='text-lg font-bold'>193.20</h3>
+                            <h3 className='text-lg font-bold'>
+                                {props.vehicleType === 'car' ? props.fare.car :
+                                    props.vehicleType === 'auto' ? props.fare.auto :
+                                        props.vehicleType === 'motorcycle' ? props.fare.motorcycle :
+                                            'Error'}
+                            </h3>
                             <p className='text-gray-700 text-sm'>Cash Payment</p>
                         </div>
                     </div>
