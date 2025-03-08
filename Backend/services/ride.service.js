@@ -2,7 +2,7 @@ const rideModel = require('../models/ride.model');
 const mapService = require('./maps.service');
 const crypto = require('crypto');
 
-module.exports.getFare = async (pickup,destination) =>{
+const getFare = async (pickup,destination) =>{
     if (!pickup || !destination) {
         throw new Error('Invalid Pickup or Destination Address');
     }
@@ -27,9 +27,9 @@ module.exports.getFare = async (pickup,destination) =>{
     };
 
     const fare = {
-        auto: baseFare.auto + (perKmRate.auto * parseFloat(distanceTime.distance)) + (perMinuteRate.auto * parseFloat(distanceTime.duration)),
-        car: baseFare.car + (perKmRate.car * parseFloat(distanceTime.distance)) + (perMinuteRate.car * parseFloat(distanceTime.duration)),
-        motorcycle: baseFare.motorcycle + (perKmRate.motorcycle * parseFloat(distanceTime.distance)) + (perMinuteRate.motorcycle * parseFloat(distanceTime.duration))
+        auto: baseFare.auto + (perKmRate.auto * parseInt(distanceTime.distance,10)) + (perMinuteRate.auto * parseInt(distanceTime.duration,10)),
+        car: baseFare.car + (perKmRate.car * parseInt(distanceTime.distance,10)) + (perMinuteRate.car * parseInt(distanceTime.duration,10)),
+        motorcycle: baseFare.motorcycle + (perKmRate.motorcycle * parseInt(distanceTime.distance,10)) + (perMinuteRate.motorcycle * parseInt(distanceTime.duration,10))
     };
 
     return fare;
@@ -43,7 +43,7 @@ const getOTP = (num)=>{
     return generateOTP(num);
 }
 
-module.exports.createRide = async ({user, pickup, destination, vehicleType})=>{
+const createRide = async ({user, pickup, destination, vehicleType})=>{
     if (!user || !pickup || !destination || !vehicleType) {
         throw new Error('All fields are required');
     }
@@ -58,3 +58,7 @@ module.exports.createRide = async ({user, pickup, destination, vehicleType})=>{
     return ride;
 };
 
+module.exports = {
+    getFare,
+    createRide
+};
