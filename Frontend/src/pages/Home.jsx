@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import 'remixicon/fonts/remixicon.css';
@@ -9,6 +9,8 @@ import LookingForDriver from '../components/LookingForDriver';
 import WaitingForDriver from '../components/WaitingForDriver';
 import MapComponent from '../components/Map';
 import axios from 'axios';
+import { SocketContext } from '../context/socketContext';
+import {UserDataContext} from '../context/userContext'
 
 const Home = () => {
   const [pickup, setPickup] = useState('')
@@ -32,6 +34,13 @@ const Home = () => {
   const confirmRidePanelRef = useRef(null)
   const vehicleFoundRef = useRef(null)
   const waitingForDriverRef = useRef(null)
+
+  const {socket} = React.useContext(SocketContext)
+  const {user} = React.useContext(UserDataContext)
+
+  useEffect(()=>{
+    socket.emit('join',{userType:'user',userId:user._id})
+  },[user])
 
   const fetchSuggestions = async (query) =>{
     if (!query || query.length<4) {

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const captainModel = require('../models/captain.model');
 
 module.exports.getAddressCoordinates = async (address) => {
     try {
@@ -16,6 +17,7 @@ module.exports.getAddressCoordinates = async (address) => {
 
         const { lat, lon } = response.data[0];
         return { lat: parseFloat(lat), lng: parseFloat(lon) };
+        
     } catch (error) {
         console.error("Error fetching coordinates:", error.message);
         return null;
@@ -97,4 +99,15 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
         console.error("Error fetching autocomplete suggestions:", error.message);
         return [];
     }
+};
+
+module.exports.getCaptainsInTheRadius = async (ltd,lng, radius) => {
+    const captains = await captainModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [[ltd,lng], radius / 6371],
+            },
+        },
+    });
+    return captains;
 };
