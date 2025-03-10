@@ -1,6 +1,6 @@
 const socketIo = require('socket.io');
-const userModel= require('./Backend/models/user.model');
-const captainModel= require('./Backend/models/captain.model');
+const userModel= require('./models/user.model');
+const captainModel= require('./models/captain.model');
 
 let io;
 
@@ -12,15 +12,15 @@ function initializeSocket(server) {
         }
     });
     io.on('connection', (socket) => {
-        console.log('A user connected:', socket.id);
+        console.log(`Client connected: ${socket.id}`);
 
         socket.on('join', async (data) => {
             const {userId, userType} = data;
             console.log('User joined:', userId, userType);
             if (userType === 'user') {
-                const user = await userModel.findByIdAndUpdate(userId, {socketId: socket.id});
+                await userModel.findByIdAndUpdate(userId, {socketId: socket.id});
             } else if (userType === 'captain') {
-                const captain = await captainModel.findByIdAndUpdate(userId,{socketId:socket.id});
+                await captainModel.findByIdAndUpdate(userId,{socketId:socket.id});
         }});
 
         socket.on('update-location-captain', async (data) => {
@@ -34,7 +34,7 @@ function initializeSocket(server) {
         });
 
         socket.on('disconnect', () => {
-            console.log('User disconnected:', socket.id);
+            console.log(`Client disconnected: ${socket.id}`);
         });
     });
 }
