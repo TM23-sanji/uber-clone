@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "gsap": "^3.12.7",
     "leaflet": "^1.9.4",
     "react": "^19.0.0",
