@@ -32,11 +32,21 @@ const CaptainHome = () => {
     const locationInterval = setInterval(updateLocation, 10000);
     updateLocation()
     // return () => clearInterval(locationInterval);
-  })
+  },[socket,captain._id])
 
-  socket.on('new-ride',(data)=>{
-    console.log(data);
-  })
+  useEffect(() => {
+    // Register the 'new-ride' listener
+    const handleNewRide = (data) => {
+      console.log('New ride received:', data);
+    };
+  
+    socket.on('new-ride', handleNewRide);
+  
+    // Clean up the listener on component unmount
+    return () => {
+      socket.off('new-ride', handleNewRide);
+    };
+  }, [socket]);
 
   useGSAP(() => {
     if (ridePopupPanel) {
