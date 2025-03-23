@@ -28,6 +28,8 @@ const Home = () => {
   const [vehicleFound, setVehicleFound] = useState(false)
   const [waitingForDriver, setWaitingForDriver] = useState(false)
 
+  const [ride, setRide] = useState(null)
+
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
   const vehiclePanelRef = useRef(null)
@@ -47,6 +49,7 @@ const Home = () => {
       console.log('Ride Confirmed:', ride);
       setVehicleFound(false);
       setWaitingForDriver(true);
+      setRide(ride);
     };
 
     socket.on('ride-confirmed', handleRideConfirmed);
@@ -164,7 +167,7 @@ const Home = () => {
       </div>
 
       <div ref={waitingForDriverRef} className='fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12 '>
-        <WaitingForDriver setWaitingForDriver={setWaitingForDriver}/>
+        <WaitingForDriver ride={ride} setWaitingForDriver={setWaitingForDriver}/>
       </div>
       
     </div>

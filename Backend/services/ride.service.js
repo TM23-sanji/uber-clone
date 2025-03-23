@@ -66,7 +66,7 @@ const confirmRide = async (rideId,captain)=>{
         throw new Error('Invalid Captain');
     }
     await rideModel.findOneAndUpdate({_id:rideId},{status:'accepted',captain:captain._id});
-    const ride = await rideModel.findOne({_id:rideId}).populate('user');
+    const ride = await rideModel.findOne({_id:rideId}).populate('user').populate('captain').select('+otp');
     
     if (!ride) {
         throw new Error('Ride not found');
