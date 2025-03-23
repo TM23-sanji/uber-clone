@@ -42,6 +42,21 @@ const Home = () => {
     socket.emit('join',{userType:'user',userId:user._id})
   },[user])
 
+  useEffect(() => {
+    const handleRideConfirmed = (ride) => {
+      console.log('Ride Confirmed:', ride);
+      setVehicleFound(false);
+      setWaitingForDriver(true);
+    };
+
+    socket.on('ride-confirmed', handleRideConfirmed);
+
+    // Cleanup the listener when the component unmounts or re-renders
+    return () => {
+      socket.off('ride-confirmed', handleRideConfirmed);
+    };
+  }, [socket]);
+
   const fetchSuggestions = async (query) =>{
     if (!query || query.length<4) {
       setSuggestions([])
