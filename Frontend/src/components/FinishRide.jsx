@@ -14,7 +14,7 @@ const FinishRide = (props) => {
     <div className='flex items-center justify-between mt-2 p-3 border-2 border-yellow-500 rounded-lg'>
         <div className='flex items-center gap-3'>
             <img className='h-12 w-12 rounded-full object-cover' src="https://i.pinimg.com/474x/d6/d2/9d/d6d29d91b2045fe84eb2adef85edbc2c.jpg" alt="" />
-            <h2 className='text-lg font-medium'>Tony Stark</h2>
+            <h2 className='text-lg font-medium'>{props.ride?.user.fullname.firstname+ " "+ props.ride?.user.fullname.lastname}</h2>
         </div>
 
         <h5 className='text-lg font-semibold'>2.2 KM</h5>
@@ -27,7 +27,7 @@ const FinishRide = (props) => {
                 <i className="text-xl ri-home-3-fill"></i>
                 <div>
                     <h3 className='text-lg font-bold'>562/11-A</h3>
-                    <p className='text-gray-700 text-sm'>Kankariya Talab, Bhopal</p>
+                    <p className='text-gray-700 text-sm'>{props.ride?.pickup}</p>
                 </div>
             </div>
 
@@ -35,14 +35,14 @@ const FinishRide = (props) => {
                 <i className="text-lg ri-map-pin-2-fill"></i>
                 <div>
                     <h3 className='text-lg font-bold'>562/11-A</h3>
-                    <p className='text-gray-700 text-sm'>Kankariya Talab, Bhopal</p>
+                    <p className='text-gray-700 text-sm'>{props.ride?.destination}</p>
                 </div>
             </div>
 
             <div className='flex items-center gap-3 p-3 '>
                 <i className="text-xl ri-money-rupee-circle-line"></i>
                 <div>
-                    <h3 className='text-lg font-bold'>193.20</h3>
+                    <h3 className='text-lg font-bold'>{props.ride?.fare}</h3>
                     <p className='text-gray-700 text-sm'>Cash Payment</p>
                 </div>
             </div>

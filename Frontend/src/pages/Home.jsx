@@ -53,19 +53,23 @@ const Home = () => {
       setWaitingForDriver(true);
       setRide(ride);
     };
-
-    socket.on('ride-confirmed', handleRideConfirmed);
-    socket.on('ride-started',ride=>{
-      console.log('Ride Started:',ride);
+  
+    const handleRideStarted = (ride) => {
+      console.log('Ride Started:', ride);
       setWaitingForDriver(false);
-      navigate('/riding')      
-    })
-
-    // Cleanup the listener when the component unmounts or re-renders
+      navigate('/riding',{state:{ride}});
+    };
+  
+    socket.on('ride-confirmed', handleRideConfirmed);
+    socket.on('ride-started', handleRideStarted);
+  
+    // Cleanup listeners on unmount
     return () => {
       socket.off('ride-confirmed', handleRideConfirmed);
+      socket.off('ride-started', handleRideStarted);
     };
-  }, [socket]);
+  }, [socket, navigate]); // Ensure `navigate` is included in dependencies
+  
 
   const fetchSuggestions = async (query) =>{
     if (!query || query.length<4) {
