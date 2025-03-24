@@ -10,7 +10,8 @@ import WaitingForDriver from '../components/WaitingForDriver';
 import MapComponent from '../components/Map';
 import axios from 'axios';
 import { SocketContext } from '../context/socketContext';
-import {UserDataContext} from '../context/userContext'
+import {UserDataContext} from '../context/userContext';
+import {useNavigate} from 'react-router-dom';
 
 const Home = () => {
   const [pickup, setPickup] = useState('')
@@ -29,6 +30,7 @@ const Home = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false)
 
   const [ride, setRide] = useState(null)
+  const navigate=useNavigate()
 
   const panelRef = useRef(null)
   const panelCloseRef = useRef(null)
@@ -53,6 +55,11 @@ const Home = () => {
     };
 
     socket.on('ride-confirmed', handleRideConfirmed);
+    socket.on('ride-started',ride=>{
+      console.log('Ride Started:',ride);
+      setWaitingForDriver(false);
+      navigate('/riding')      
+    })
 
     // Cleanup the listener when the component unmounts or re-renders
     return () => {

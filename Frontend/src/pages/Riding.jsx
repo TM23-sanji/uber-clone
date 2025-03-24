@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import MapComponent from '../components/Map'
 
 const Riding = () => {
     return (
@@ -9,7 +10,10 @@ const Riding = () => {
             </Link>
 
             <div className='h-1/2'>
-                <img className='h-full w-full object-cover' src="https://i.pinimg.com/736x/4d/b4/cc/4db4cc43defd406d7a1f06a2276d2101.jpg" alt="" />
+                {/* <img className='h-full w-full object-cover' src="https://i.pinimg.com/736x/4d/b4/cc/4db4cc43defd406d7a1f06a2276d2101.jpg" alt="" /> */}
+                 <div className='h-[50%] w-full fixed'>
+                    <MapComponent />
+                </div>               
 
             </div>
 

@@ -1,11 +1,27 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import CaptainRiding from '../pages/CaptainRiding'
+import CaptainRiding from '../pages/CaptainRiding';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const ConfirmRidePopUp = (props) => {
     const [otp, setOtp] = useState('')
-    const submitHandler=(e)=>{
+    const navigate=useNavigate()
+
+    const submitHandler= async (e)=>{
         e.preventDefault()
+        const response=await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`,{
+            params:{rideId: props.ride._id,
+            otp: otp
+        },
+            headers:{Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+        if (response.status===200){
+            props.setConfirmRidePopupPanel(false)
+            props.setRidePopupPanel(false)
+            navigate('/captain-riding')
+        } 
     }
     return (
         <div >
@@ -57,7 +73,7 @@ const ConfirmRidePopUp = (props) => {
                 <div className='mt-6 w-full'>
                     <form onSubmit={(e)=>{submitHandler(e)}}>
                         <input value={otp} onChange={(e)=>{setOtp(e.target.value)}} type="text" className='bg-[#eee] px-6 py-2 font-mono text-lg rounded-lg w-full mt-3 mb-3' placeholder='Enter OTP' />
-                    <Link to='/captain-riding' className='w-full flex justify-center bg-green-600 text-white font-semibold p-2 rounded-lg'>Confirm</Link>
+                    <button className='w-full flex justify-center bg-green-600 text-white font-semibold p-2 rounded-lg'>Confirm</button>
                     <button onClick={() => { props.setConfirmRidePopupPanel(false), props.setRidePopupPanel(false) }} className='w-full bg-red-300 text-black font-semibold mt-1 p-2 rounded-lg'>Cancel</button>
                     </form>
                 </div>
