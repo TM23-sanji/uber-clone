@@ -25,15 +25,23 @@ const CaptainHome = () => {
     socket.emit('join', {userId: captain._id, userType: 'captain'});
     const updateLocation = () => {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          socket.emit('update-location-captain', { userId: captain._id, location:{ltd: position.coords.latitude, lng:position.coords.longitude} });
-        });
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            socket.emit('update-location-captain', {
+              userId: captain._id,
+              location: { ltd: position.coords.latitude, lng: position.coords.longitude }
+            });
+          },
+          error => {
+            console.error('Error getting location:', error);
+          }
+        );        
       }
     };
 
     const locationInterval = setInterval(updateLocation, 10000);
     updateLocation()
-    // return () => clearInterval(locationInterval);
+    return () => clearInterval(locationInterval);
   },[socket,captain._id])
 
   useEffect(() => {
