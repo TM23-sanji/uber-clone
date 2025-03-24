@@ -59,7 +59,6 @@ const Home = () => {
       setWaitingForDriver(false);
       navigate('/riding',{state:{ride}});
     };
-  
     socket.on('ride-confirmed', handleRideConfirmed);
     socket.on('ride-started', handleRideStarted);
   

@@ -1,10 +1,27 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import MapComponent from '../components/Map'
+import React from 'react';
+import { Link, useLocation,useNavigate } from 'react-router-dom';
+import MapComponent from '../components/Map';
+import { SocketContext } from '../context/socketContext';
+import { useEffect, useContext } from 'react';
 
 const Riding = () => {
     const location= useLocation();
-    const {ride}=location.state || {}
+    const {ride}=location.state || {};
+    const {socket}=useContext(SocketContext);
+    const navigate= useNavigate();
+
+    useEffect(() => {
+      const handleRideEnded = ()=>{
+        navigate('/home')
+      }
+        
+      socket.on('ride-ended',handleRideEnded)
+    
+      return () => {
+        socket.off('ride-ended',handleRideEnded)
+      }
+    }, [socket])
+    
     return (
         <div className='h-screen'>
             <Link to='/home' className='fixed h-10 right-2 top-2 w-10 bg-white flex items-center justify-center rounded-full'>
